@@ -219,7 +219,7 @@ export default function Home() {
             </div>
             <div>
               <h3 className="font-semibold mb-4 text-sm">CONTACT</h3>
-              <p className="text-sm text-muted-foreground">ktcgweb.vercel.app/</p>
+              <a href="https://ktcgweb.vercel.app" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground transition">ktcgweb.vercel.app</a>
             </div>
           </div>
         </div>
