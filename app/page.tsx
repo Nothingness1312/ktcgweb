@@ -121,28 +121,28 @@ export default function Home() {
     img: '/team/1.jpg'
   },
   { 
-    name: 'HACKER_02', 
-    role: 'Reverse Engineer',
+    name: 'Ren1Ko', 
+    role: 'Cryptography | Linux Expert',
     img: '/team/2.jpg'
   },
   { 
-    name: 'HACKER_03', 
-    role: 'Web Exploitation',
+    name: 'Soon', 
+    role: 'Soon',
     img: '/team/3.jpg'
   },
   { 
-    name: 'HACKER_04', 
-    role: 'Cryptography Expert',
+    name: 'Soon', 
+    role: 'Soon',
     img: '/team/4.jpg'
   },
   { 
-    name: 'HACKER_05', 
-    role: 'Infrastructure',
+    name: 'Soon', 
+    role: 'Soon',
     img: '/team/5.jpg'
   },
   { 
-    name: 'HACKER_06', 
-    role: 'OSINT Specialist',
+    name: 'Soon', 
+    role: 'Soon',
     img: '/team/6.jpg'
   },
 ].map((member, i) => (
