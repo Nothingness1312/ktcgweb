@@ -151,7 +151,7 @@ export default function Home() {
           </div>
           {/* Role Filter */}
           <div className="flex flex-wrap justify-center gap-2 mb-8 fade-in-up">
-            {['All', 'Digital Forensics', 'Cryptography', 'Soon'].map((role) => (
+            {['All', 'Digital Forensics', 'Cryptography', 'Web Exploitation', 'Reverse Engineering', 'Binary Exploitation', 'OSINT', 'Soon'].map((role) => (
               <button
                 key={role}
                 onClick={() => setSelectedRole(role)}
