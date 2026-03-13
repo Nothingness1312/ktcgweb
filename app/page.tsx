@@ -1,9 +1,44 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Refs for sections
+  const heroRef = useRef<HTMLElement>(null);
+  const aboutRef = useRef<HTMLElement>(null);
+  const teamRef = useRef<HTMLElement>(null);
+  const joinRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all elements with animation classes
+    const animatedElements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right, .scale-in');
+    animatedElements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    setMobileMenuOpen(false); // Close mobile menu after navigation
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -17,9 +52,9 @@ export default function Home() {
 
             {/* Desktop Menu */}
             <div className="hidden md:flex gap-8">
-              <a href="#about" className="text-sm font-medium hover:text-primary transition">ABOUT</a>
-              <a href="#team" className="text-sm font-medium hover:text-primary transition">TEAM</a>
-              <a href="#join" className="text-sm font-medium hover:text-primary transition">JOIN</a>
+              <button onClick={() => scrollToSection('about')} className="text-sm font-medium hover:text-primary transition">ABOUT</button>
+              <button onClick={() => scrollToSection('team')} className="text-sm font-medium hover:text-primary transition">TEAM</button>
+              <button onClick={() => scrollToSection('join')} className="text-sm font-medium hover:text-primary transition">JOIN</button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -36,51 +71,51 @@ export default function Home() {
           {/* Mobile Menu */}
           {mobileMenuOpen && (
             <div className="md:hidden border-t border-border py-4 space-y-3">
-              <a href="#about" className="block text-sm font-medium hover:text-primary transition">ABOUT</a>
-              <a href="#team" className="block text-sm font-medium hover:text-primary transition">TEAM</a>
-              <a href="#join" className="block text-sm font-medium hover:text-primary transition">JOIN</a>
+              <button onClick={() => scrollToSection('about')} className="block text-sm font-medium hover:text-primary transition">ABOUT</button>
+              <button onClick={() => scrollToSection('team')} className="block text-sm font-medium hover:text-primary transition">TEAM</button>
+              <button onClick={() => scrollToSection('join')} className="block text-sm font-medium hover:text-primary transition">JOIN</button>
             </div>
           )}
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="py-20 md:py-32 px-4 border-b border-border">
+      <section className="py-20 md:py-32 px-4 border-b border-border fade-in-up">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="flex items-start justify-center gap-6 mb-8">
-            <img src="/ktcg-logo.png" alt="KTCG" className="h-24 w-24 md:h-32 md:w-32 rounded-2xl object-cover border-2 border-primary/30" />
-            <div className="flex flex-col justify-center">
-              <span className="inline-block px-3 py-1 mb-4 text-xs font-medium rounded-full bg-primary/10 text-primary w-fit">
+          <div className="flex items-start justify-center gap-6 mb-8 fade-in-up">
+            <img src="/ktcg-logo.png" alt="KTCG" className="h-24 w-24 md:h-32 md:w-32 rounded-2xl object-cover border-2 border-primary/30 scale-in" />
+            <div className="flex flex-col justify-center fade-in-right">
+              <span className="inline-block px-3 py-1 mb-4 text-xs font-medium rounded-full bg-primary/10 text-primary w-fit fade-in-up">
                 Selamat datang di KTCG Community
               </span>
-              <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-balance text-left">
+              <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-balance text-left fade-in-up">
                 Komunitas Cybersecurity untuk Semua
               </h1>
             </div>
           </div>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto fade-in-up">
             Komunitas hacking dan cybersecurity yang didedikasikan untuk enthusiast yang ingin mendalami dunia penetration testing dan ethical hacking.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#join" className="button-primary">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center fade-in-up">
+            <button onClick={() => scrollToSection('join')} className="button-primary">
               JOIN DISCORD
-            </a>
-            <a href="#about" className="button-secondary">
+            </button>
+            <button onClick={() => scrollToSection('about')} className="button-secondary">
               LEARN MORE
-            </a>
+            </button>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 mt-16 pt-12 border-t border-border">
-            <div>
+          <div className="grid grid-cols-3 gap-4 mt-16 pt-12 border-t border-border fade-in-up">
+            <div className="fade-in-left">
               <div className="text-3xl font-bold text-primary">100+</div>
               <div className="text-sm text-muted-foreground">Active Members</div>
             </div>
-            <div>
+            <div className="fade-in-up">
               <div className="text-3xl font-bold text-accent">2025</div>
               <div className="text-sm text-muted-foreground">Year Founded</div>
             </div>
-            <div>
+            <div className="fade-in-right">
               <div className="text-3xl font-bold text-secondary">100%</div>
               <div className="text-sm text-muted-foreground">Community Driven</div>
             </div>
@@ -89,10 +124,10 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 md:py-28 px-4 border-b border-border">
+      <section id="about" ref={aboutRef} className="py-20 md:py-28 px-4 border-b border-border fade-in-up">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold mb-8">Tentang KTCG</h2>
-          <div className="space-y-6 text-muted-foreground leading-relaxed">
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 fade-in-up">Tentang KTCG</h2>
+          <div className="space-y-6 text-muted-foreground leading-relaxed fade-in-up">
             <p>
               KTCG Community adalah komunitas hacking dan cybersecurity yang didedikasikan untuk para enthusiast yang ingin mendalami dunia penetration testing, hacking etis, dan cybersecurity. Kami percaya bahwa belajar cybersecurity harus menyenangkan, menantang, dan inklusif.
             </p>
@@ -107,13 +142,13 @@ export default function Home() {
       </section>
 
       {/* Team Members Section */}
-      <section id="team" className="py-20 md:py-28 px-4 border-b border-border bg-gradient-to-b from-background via-card/10 to-background">
+      <section id="team" ref={teamRef} className="py-20 md:py-28 px-4 border-b border-border bg-gradient-to-b from-background via-card/10 to-background fade-in-up">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 fade-in-up">
             <h2 className="text-3xl md:text-5xl font-bold mb-4">Anggota KTCG</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">Tim KTCG yang berdedikasi untuk kesempurnaan dalam dunia cybersecurity</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 scale-in">
             {[
   { 
     name: 'kkarinzzz', 
@@ -176,9 +211,9 @@ export default function Home() {
       </section>
 
       {/* Discord Join Section */}
-      <section id="join" className="py-20 md:py-28 px-4 border-b border-border">
+      <section id="join" ref={joinRef} className="py-20 md:py-28 px-4 border-b border-border fade-in-up">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-8">Join Our Discord</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 fade-in-up">Join Our Discord</h2>
           <a
             href="https://discord.gg/nH94vYstKA"
             target="_blank"
@@ -194,9 +229,9 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-4 border-t border-border">
+      <footer className="py-12 px-4 border-t border-border fade-in-up">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 fade-in-up">
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <img src="/ktcg-logo.png" alt="KTCG" className="h-14 w-14 rounded-lg object-cover border border-primary/20" />
