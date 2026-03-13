@@ -151,7 +151,7 @@ export default function Home() {
           </div>
           {/* Role Filter */}
           <div className="flex flex-wrap justify-center gap-2 mb-8 fade-in-up">
-            {['All', 'Digital Forensics', 'Cryptography | Linux Expert', 'Soon'].map((role) => (
+            {['All', 'Digital Forensics', 'Cryptography', 'Soon'].map((role) => (
               <button
                 key={role}
                 onClick={() => setSelectedRole(role)}
@@ -174,7 +174,7 @@ export default function Home() {
   },
   { 
     name: 'Ren1Ko', 
-    role: 'Cryptography | Linux Expert',
+    role: 'Cryptography',
     img: '/team/2.jpg'
   },
   { 
