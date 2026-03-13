@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState('All');
 
   // Refs for sections
   const heroRef = useRef<HTMLElement>(null);
@@ -148,6 +149,22 @@ export default function Home() {
             <h2 className="text-3xl md:text-5xl font-bold mb-4">Anggota KTCG</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">Tim KTCG yang berdedikasi untuk kesempurnaan dalam dunia cybersecurity</p>
           </div>
+          {/* Role Filter */}
+          <div className="flex flex-wrap justify-center gap-2 mb-8 fade-in-up">
+            {['All', 'Digital Forensics', 'Cryptography | Linux Expert', 'Soon'].map((role) => (
+              <button
+                key={role}
+                onClick={() => setSelectedRole(role)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+                  selectedRole === role
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-card text-muted-foreground hover:bg-card/80'
+                }`}
+              >
+                {role}
+              </button>
+            ))}
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 scale-in">
             {[
   { 
@@ -180,7 +197,7 @@ export default function Home() {
     role: 'Soon',
     img: '/team/6.jpg'
   },
-].map((member, i) => (
+].filter(member => selectedRole === 'All' || member.role === selectedRole).map((member, i) => (
               <div
                 key={i}
                 className="card-hover card-reveal group relative h-64 rounded-xl p-6 bg-gradient-to-br from-card via-card to-card/50 border border-border overflow-hidden"
