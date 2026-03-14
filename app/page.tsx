@@ -5,8 +5,6 @@ import { useState, useEffect, useRef } from 'react';
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState('All');
-  const [selectedCTFStatus, setSelectedCTFStatus] = useState('All');
-  const [showAllCTF, setShowAllCTF] = useState(false);
 
   // CTF Events Data
   const ctfEvents = [
@@ -93,9 +91,8 @@ export default function Home() {
     }
   ];
 
-  // Filter CTF events (don't slice here)
-  const filteredEvents = ctfEvents.filter(event => selectedCTFStatus === 'All' || event.status === selectedCTFStatus);
-  const displayedEvents = filteredEvents.slice(0, showAllCTF ? filteredEvents.length : 6);
+  // Filter CTF events - show only first 6 events
+  const displayedEvents = ctfEvents.slice(0, 6);
 
   // Refs for sections
   const heroRef = useRef<HTMLElement>(null);
@@ -124,10 +121,6 @@ export default function Home() {
 
     return () => observer.disconnect();
   }, []);
-
-  useEffect(() => {
-  setShowAllCTF(false);
-}, [selectedCTFStatus]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -248,27 +241,10 @@ export default function Home() {
             <p className="text-muted-foreground max-w-2xl mx-auto">Event CTF yang telah diikuti dan sedang berjalan oleh anggota KTCG Community</p>
           </div>
 
-          {/* CTF Status Filter */}
-          <div className="flex flex-wrap justify-center gap-2 mb-8 fade-in-up">
-            {['All', 'Completed', 'Ongoing'].map((status) => (
-              <button
-                key={status}
-                onClick={() => setSelectedCTFStatus(status)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-                  selectedCTFStatus === status
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-card text-muted-foreground hover:bg-card/80'
-                }`}
-              >
-                {status}
-              </button>
-            ))}
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {displayedEvents.map((event, i) => (
               <div
-                key={`${event.name}-${event.date}`}
+                key={i}
                 className="card-hover group relative p-6 bg-gradient-to-br from-card via-card to-card/50 border border-border rounded-xl overflow-hidden fade-in-up"
                 style={{ animationDelay: `${i * 0.1}s` }}
               >
@@ -319,26 +295,6 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Show More Button */}
-          {filteredEvents.length > 6 && (
-            <div className="text-center mt-8 fade-in-up">
-              {!showAllCTF ? (
-                <button
-                  onClick={() => setShowAllCTF(true)}
-                  className="button-secondary"
-                >
-                  Show More CTF Events
-                </button>
-              ) : (
-                <button
-                  onClick={() => setShowAllCTF(false)}
-                  className="button-secondary"
-                >
-                  Show Less
-                </button>
-              )}
-            </div>
-          )}
         </div>
       </section>
 
@@ -351,7 +307,7 @@ export default function Home() {
           </div>
           {/* Role Filter */}
           <div className="flex flex-wrap justify-center gap-2 mb-8 fade-in-up">
-            {['All', 'Digital Forensics', 'Cryptography', 'Web Exploitation', 'Reverse Engineering', 'Binary Exploitation', 'OSINT', 'Soon'].map((role) => (
+            {['All', 'Digital Forensics', 'Cryptography', 'Web Exploitation', 'Reverse Engineering', 'Binary Exploitation', 'OSINT'].map((role) => (
               <button
                 key={role}
                 onClick={() => setSelectedRole(role)}
@@ -378,23 +334,23 @@ export default function Home() {
     img: '/team/2.jpg'
   },
   { 
-    name: 'Soon', 
-    role: 'Soon',
+    name: 'Alex Chen', 
+    role: 'Web Exploitation',
     img: '/team/3.jpg'
   },
   { 
-    name: 'Soon', 
-    role: 'Soon',
+    name: 'Sarah Kim', 
+    role: 'Reverse Engineering',
     img: '/team/4.jpg'
   },
   { 
-    name: 'Soon', 
-    role: 'Soon',
+    name: 'Mike Johnson', 
+    role: 'Binary Exploitation',
     img: '/team/5.jpg'
   },
   { 
-    name: 'Soon', 
-    role: 'Soon',
+    name: 'Lisa Wong', 
+    role: 'OSINT',
     img: '/team/6.jpg'
   },
 ].filter(member => selectedRole === 'All' || member.role === selectedRole).map((member, i) => (
