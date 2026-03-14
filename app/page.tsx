@@ -5,10 +5,102 @@ import { useState, useEffect, useRef } from 'react';
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState('All');
+  const [selectedCTFStatus, setSelectedCTFStatus] = useState('All');
+  const [showAllCTF, setShowAllCTF] = useState(false);
+
+  // CTF Events Data
+  const ctfEvents = [
+    {
+      name: 'CTF Event 1',
+      date: 'Januari 2025',
+      description: 'Kompetisi Capture The Flag pertama yang diikuti komunitas',
+      status: 'Completed',
+      link: 'https://example.com/ctf1',
+      linkText: 'View Event',
+      image: 'https://via.placeholder.com/400x200/4f46e5/ffffff?text=CTF+Event+1'
+    },
+    {
+      name: 'CTF Event 2',
+      date: 'Februari 2025',
+      description: 'Event cybersecurity dengan fokus pada web exploitation',
+      status: 'Completed',
+      link: 'https://example.com/ctf2',
+      linkText: 'View Event',
+      image: 'https://via.placeholder.com/400x200/059669/ffffff?text=CTF+Event+2'
+    },
+    {
+      name: 'CTF Event 3',
+      date: 'Maret 2025',
+      description: 'Kompetisi dengan berbagai kategori challenge',
+      status: 'Completed',
+      link: 'https://example.com/ctf3',
+      linkText: 'View Event',
+      image: 'https://via.placeholder.com/400x200/dc2626/ffffff?text=CTF+Event+3'
+    },
+    {
+      name: 'CTF Event 4',
+      date: 'April 2025',
+      description: 'Event khusus cryptography dan forensics',
+      status: 'Completed',
+      link: 'https://example.com/ctf4',
+      linkText: 'View Event',
+      image: 'https://via.placeholder.com/400x200/7c3aed/ffffff?text=CTF+Event+4'
+    },
+    {
+      name: 'CTF Event 5',
+      date: 'Mei 2025',
+      description: 'Kompetisi tim dengan berbagai kategori',
+      status: 'Completed',
+      link: 'https://example.com/ctf5',
+      linkText: 'View Event',
+      image: 'https://via.placeholder.com/400x200/ea580c/ffffff?text=CTF+Event+5'
+    },
+    {
+      name: 'HackTheBox Challenge',
+      date: 'Maret 2025 - Sekarang',
+      description: 'Platform latihan cybersecurity yang sedang diikuti anggota aktif',
+      status: 'Ongoing',
+      link: 'https://hackthebox.com',
+      linkText: 'Join Challenge',
+      image: 'https://via.placeholder.com/400x200/0891b2/ffffff?text=HackTheBox'
+    },
+    {
+      name: 'TryHackMe Rooms',
+      date: 'Februari 2025 - Sekarang',
+      description: 'Belajar cybersecurity melalui guided rooms dan challenges',
+      status: 'Ongoing',
+      link: 'https://tryhackme.com',
+      linkText: 'Start Learning',
+      image: 'https://via.placeholder.com/400x200/be123c/ffffff?text=TryHackMe'
+    },
+    {
+      name: 'CTF Weekly Practice',
+      date: 'Januari 2025 - Sekarang',
+      description: 'Sesi latihan CTF mingguan untuk meningkatkan skill',
+      status: 'Ongoing',
+      link: 'https://discord.gg/ktcg-weekly',
+      linkText: 'Join Session',
+      image: 'https://via.placeholder.com/400x200/65a30d/ffffff?text=Weekly+Practice'
+    },
+    {
+      name: 'Bug Bounty Program',
+      date: 'April 2025 - Sekarang',
+      description: 'Program mencari vulnerability di platform mitra',
+      status: 'Ongoing',
+      link: 'https://discord.gg/ktcg-bugbounty',
+      linkText: 'Participate',
+      image: 'https://via.placeholder.com/400x200/7c2d12/ffffff?text=Bug+Bounty'
+    }
+  ];
+
+  // Filter CTF events (don't slice here)
+  const filteredEvents = ctfEvents.filter(event => selectedCTFStatus === 'All' || event.status === selectedCTFStatus);
+  const displayedEvents = filteredEvents.slice(0, showAllCTF ? filteredEvents.length : 6);
 
   // Refs for sections
   const heroRef = useRef<HTMLElement>(null);
   const aboutRef = useRef<HTMLElement>(null);
+  const achievementsRef = useRef<HTMLElement>(null);
   const teamRef = useRef<HTMLElement>(null);
   const joinRef = useRef<HTMLElement>(null);
 
@@ -33,6 +125,10 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+  setShowAllCTF(false);
+}, [selectedCTFStatus]);
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -54,6 +150,7 @@ export default function Home() {
             {/* Desktop Menu */}
             <div className="hidden md:flex gap-8">
               <button onClick={() => scrollToSection('about')} className="text-sm font-medium hover:text-primary transition">ABOUT</button>
+              <button onClick={() => scrollToSection('achievements')} className="text-sm font-medium hover:text-primary transition">ACHIEVEMENTS</button>
               <button onClick={() => scrollToSection('team')} className="text-sm font-medium hover:text-primary transition">TEAM</button>
               <button onClick={() => scrollToSection('join')} className="text-sm font-medium hover:text-primary transition">JOIN</button>
             </div>
@@ -73,6 +170,7 @@ export default function Home() {
           {mobileMenuOpen && (
             <div className="md:hidden border-t border-border py-4 space-y-3">
               <button onClick={() => scrollToSection('about')} className="block text-sm font-medium hover:text-primary transition">ABOUT</button>
+              <button onClick={() => scrollToSection('achievements')} className="block text-sm font-medium hover:text-primary transition">ACHIEVEMENTS</button>
               <button onClick={() => scrollToSection('team')} className="block text-sm font-medium hover:text-primary transition">TEAM</button>
               <button onClick={() => scrollToSection('join')} className="block text-sm font-medium hover:text-primary transition">JOIN</button>
             </div>
@@ -142,6 +240,108 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Achievements Section */}
+      <section id="achievements" ref={achievementsRef} className="py-20 md:py-28 px-4 border-b border-border bg-gradient-to-b from-background via-primary/5 to-background fade-in-up">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16 fade-in-up">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">CTF Achievements</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">Event CTF yang telah diikuti dan sedang berjalan oleh anggota KTCG Community</p>
+          </div>
+
+          {/* CTF Status Filter */}
+          <div className="flex flex-wrap justify-center gap-2 mb-8 fade-in-up">
+            {['All', 'Completed', 'Ongoing'].map((status) => (
+              <button
+                key={status}
+                onClick={() => setSelectedCTFStatus(status)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+                  selectedCTFStatus === status
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-card text-muted-foreground hover:bg-card/80'
+                }`}
+              >
+                {status}
+              </button>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {displayedEvents.map((event, i) => (
+              <div
+                key={`${event.name}-${event.date}`}
+                className="card-hover group relative p-6 bg-gradient-to-br from-card via-card to-card/50 border border-border rounded-xl overflow-hidden fade-in-up"
+                style={{ animationDelay: `${i * 0.1}s` }}
+              >
+                {/* Gradient background effect */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/20" />
+
+                {/* Content */}
+                <div className="relative z-10">
+                  <img src={event.image} alt={event.name} className="w-full h-32 mb-4 group-hover:scale-105 transition-transform duration-300 rounded-lg object-cover" />
+                  <div className="flex items-start justify-between mb-4">
+                    <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      event.status === 'Completed'
+                        ? 'bg-green-500/10 text-green-600 border border-green-500/20'
+                        : event.status === 'Ongoing'
+                        ? 'bg-blue-500/10 text-blue-600 border border-blue-500/20'
+                        : 'bg-yellow-500/10 text-yellow-600 border border-yellow-500/20'
+                    }`}>
+                      {event.status}
+                    </div>
+                    <span className="text-sm text-muted-foreground">{event.date}</span>
+                  </div>
+
+                  <h3 className="text-xl font-bold text-primary group-hover:text-accent transition-colors duration-300 mb-2">
+                    {event.name}
+                  </h3>
+
+                  <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300 mb-4">
+                    {event.description}
+                  </p>
+
+                  <div className="flex items-center justify-between">
+                    <a
+                      href={event.link}
+                      target={event.link !== '#' ? '_blank' : undefined}
+                      rel={event.link !== '#' ? 'noopener noreferrer' : undefined}
+                      className="text-xs text-primary hover:text-accent transition-colors duration-300 underline decoration-primary/30 hover:decoration-accent/50"
+                    >
+                      {event.linkText}
+                    </a>
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
+                      <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Show More Button */}
+          {filteredEvents.length > 6 && (
+            <div className="text-center mt-8 fade-in-up">
+              {!showAllCTF ? (
+                <button
+                  onClick={() => setShowAllCTF(true)}
+                  className="button-secondary"
+                >
+                  Show More CTF Events
+                </button>
+              ) : (
+                <button
+                  onClick={() => setShowAllCTF(false)}
+                  className="button-secondary"
+                >
+                  Show Less
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* Team Members Section */}
       <section id="team" ref={teamRef} className="py-20 md:py-28 px-4 border-b border-border bg-gradient-to-b from-background via-card/10 to-background fade-in-up">
         <div className="max-w-6xl mx-auto">
@@ -199,7 +399,7 @@ export default function Home() {
   },
 ].filter(member => selectedRole === 'All' || member.role === selectedRole).map((member, i) => (
               <div
-                key={i}
+                key={`${member.name}-${i}`}
                 className="card-hover card-reveal group relative h-64 rounded-xl p-6 bg-gradient-to-br from-card via-card to-card/50 border border-border overflow-hidden"
                 style={{ animationDelay: `${i * 0.1}s` }}
               >
@@ -259,6 +459,7 @@ export default function Home() {
               <h3 className="font-semibold mb-4 text-sm">NAVIGATION</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li><a href="#about" className="hover:text-foreground transition">About</a></li>
+                <li><a href="#achievements" className="hover:text-foreground transition">Achievements</a></li>
                 <li><a href="#team" className="hover:text-foreground transition">Team</a></li>
                 <li><a href="#join" className="hover:text-foreground transition">Join Us</a></li>
               </ul>
