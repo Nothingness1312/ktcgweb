@@ -9,85 +9,52 @@ export default function Home() {
   // CTF Events Data
   const ctfEvents = [
     {
-      name: 'CTF Event 1',
-      date: 'Januari 2025',
-      description: 'Kompetisi Capture The Flag pertama yang diikuti komunitas',
+      name: 'PsychCTF 2026',
+      date: 'Maret 2026',
+      description: 'Event dari PsychCTF',
       status: 'Completed',
-      link: 'https://example.com/ctf1',
-      linkText: 'View Event',
-      image: 'https://via.placeholder.com/400x200/4f46e5/ffffff?text=CTF+Event+1'
+      link: 'https://ctftime.org/event/3166',
+      linkText: 'View Event'
     },
     {
-      name: 'CTF Event 2',
-      date: 'Februari 2025',
-      description: 'Event cybersecurity dengan fokus pada web exploitation',
+      name: 'FGTE0',
+      date: 'Maret 2026',
+      description: 'Event CTF dari FGTE',
       status: 'Completed',
-      link: 'https://example.com/ctf2',
-      linkText: 'View Event',
-      image: 'https://via.placeholder.com/400x200/059669/ffffff?text=CTF+Event+2'
+      link: 'https://ctf.ariaf.my.id',
+      linkText: 'View Event'
     },
     {
-      name: 'CTF Event 3',
-      date: 'Maret 2025',
-      description: 'Kompetisi dengan berbagai kategori challenge',
-      status: 'Completed',
-      link: 'https://example.com/ctf3',
-      linkText: 'View Event',
-      image: 'https://via.placeholder.com/400x200/dc2626/ffffff?text=CTF+Event+3'
-    },
-    {
-      name: 'CTF Event 4',
-      date: 'April 2025',
-      description: 'Event khusus cryptography dan forensics',
-      status: 'Completed',
-      link: 'https://example.com/ctf4',
-      linkText: 'View Event',
-      image: 'https://via.placeholder.com/400x200/7c3aed/ffffff?text=CTF+Event+4'
-    },
-    {
-      name: 'CTF Event 5',
-      date: 'Mei 2025',
-      description: 'Kompetisi tim dengan berbagai kategori',
-      status: 'Completed',
-      link: 'https://example.com/ctf5',
-      linkText: 'View Event',
-      image: 'https://via.placeholder.com/400x200/ea580c/ffffff?text=CTF+Event+5'
-    },
-    {
-      name: 'HackTheBox Challenge',
-      date: 'Maret 2025 - Sekarang',
-      description: 'Platform latihan cybersecurity yang sedang diikuti anggota aktif',
+      name: 'RamadanCTF 2026',
+      date: 'Maret 2026',
+      description: 'Event dari vulnlab',
       status: 'Ongoing',
-      link: 'https://hackthebox.com',
-      linkText: 'Join Challenge',
-      image: 'https://via.placeholder.com/400x200/0891b2/ffffff?text=HackTheBox'
+      link: 'https://lab.vulnbydefault.com/ramadan-ctf-2026',
+      linkText: 'View Event'
     },
     {
-      name: 'TryHackMe Rooms',
-      date: 'Februari 2025 - Sekarang',
-      description: 'Belajar cybersecurity melalui guided rooms dan challenges',
+      name: 'RamadanCTF 2026 (Indonesia)',
+      date: 'Maret 2026',
+      description: 'Event CTF selama bulan Ramadan',
       status: 'Ongoing',
-      link: 'https://tryhackme.com',
-      linkText: 'Start Learning',
-      image: 'https://via.placeholder.com/400x200/be123c/ffffff?text=TryHackMe'
+      link: 'https://ctf.ocry.com/',
+      linkText: 'View Event'
     },
     {
-      name: 'CTF Weekly Practice',
-      date: 'Januari 2025 - Sekarang',
-      description: 'Sesi latihan CTF mingguan untuk meningkatkan skill',
+      name: 'tbkctf5',
+      date: 'Maret 2026',
+      description: 'Event dari tbkctf5',
       status: 'Ongoing',
-      link: 'https://discord.gg/ktcg-weekly',
-      linkText: 'Join Session',
-      image: 'https://via.placeholder.com/400x200/65a30d/ffffff?text=Weekly+Practice'
+      link: 'https://alpacahack.com/ctfs/tkbctf5',
+      linkText: 'View Event'
     },
     {
-      name: 'Bug Bounty Program',
-      date: 'April 2025 - Sekarang',
-      description: 'Program mencari vulnerability di platform mitra',
-      status: 'Ongoing',
-      link: 'https://discord.gg/ktcg-bugbounty',
-      linkText: 'Participate',
-      image: 'https://via.placeholder.com/400x200/7c2d12/ffffff?text=Bug+Bounty'
+      name: 'Nullcon Goa HackIM 2026 CTF',
+      date: 'Februari 2026',
+      description: 'Event dari Nullcon Goa HackIM',
+      status: 'Completed',
+      link: 'https://ctftime.org/event/3066',
+      linkText: 'View Event'
     }
   ];
 
@@ -238,7 +205,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 fade-in-up">
             <h2 className="text-3xl md:text-5xl font-bold mb-4">CTF Achievements</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">Event CTF yang telah diikuti dan sedang berjalan oleh anggota KTCG Community</p>
+            <p className="text-muted-foreground max-w-2xl mx-auto">Event CTF yang telah diikuti dan sedang berjalan oleh anggota KTCG Community (Berdasarkan data terbaru)</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -253,7 +220,6 @@ export default function Home() {
 
                 {/* Content */}
                 <div className="relative z-10">
-                  <img src={event.image} alt={event.name} className="w-full h-32 mb-4 group-hover:scale-105 transition-transform duration-300 rounded-lg object-cover" />
                   <div className="flex items-start justify-between mb-4">
                     <div className={`px-3 py-1 rounded-full text-xs font-medium ${
                       event.status === 'Completed'
@@ -334,22 +300,22 @@ export default function Home() {
     img: '/team/2.jpg'
   },
   { 
-    name: 'Alex Chen', 
+    name: 'soon', 
     role: 'Web Exploitation',
     img: '/team/3.jpg'
   },
   { 
-    name: 'Sarah Kim', 
+    name: 'soon', 
     role: 'Reverse Engineering',
     img: '/team/4.jpg'
   },
   { 
-    name: 'Mike Johnson', 
+    name: 'soon', 
     role: 'Binary Exploitation',
     img: '/team/5.jpg'
   },
   { 
-    name: 'Lisa Wong', 
+    name: 'soon', 
     role: 'OSINT',
     img: '/team/6.jpg'
   },
