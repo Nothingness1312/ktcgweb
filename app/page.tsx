@@ -300,8 +300,8 @@ export default function Home() {
     img: '/team/2.jpg'
   },
   { 
-    name: 'soon', 
-    role: 'Web Exploitation',
+    name: 'Claritys', 
+    role: 'Digital Forensics',
     img: '/team/3.jpg'
   },
   { 
