@@ -28,7 +28,7 @@ export default function Home() {
       name: 'RamadanCTF 2026',
       date: 'Maret 2026',
       description: 'Event dari vulnlab',
-      status: 'Ongoing',
+      status: 'Completed',
       link: 'https://lab.vulnbydefault.com/ramadan-ctf-2026',
       linkText: 'View Event'
     },
@@ -36,16 +36,16 @@ export default function Home() {
       name: 'RamadanCTF 2026 (Indonesia)',
       date: 'Maret 2026',
       description: 'Event CTF selama bulan Ramadan',
-      status: 'Ongoing',
+      status: 'Completed',
       link: 'https://ctf.ocry.com/',
       linkText: 'View Event'
     },
     {
-      name: 'tbkctf5',
+      name: 'TexSaw',
       date: 'Maret 2026',
-      description: 'Event dari tbkctf5',
+      description: 'Event dari TexSaw',
       status: 'Ongoing',
-      link: 'https://alpacahack.com/ctfs/tkbctf5',
+      link: 'https://texsaw.org/',
       linkText: 'View Event'
     },
     {
