@@ -7,7 +7,7 @@ const geist = Geist({ subsets: ["latin"] });
 const geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'KTCG Community - Website Community',
+  title: 'KTCG Community - Komunitas CTF Indonesia',
 
   description:
     'Website Komunitas CTF Indonesia yang menyediakan berbagai informasi, sumber daya, dan diskusi seputar dunia cybersecurity.',
