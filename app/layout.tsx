@@ -52,12 +52,12 @@ export const metadata: Metadata = {
     title: 'KTCG Community',
     description:
       'Komunitas CTF Indonesia untuk belajar cybersecurity dan hacking.',
-    images: ['/ktcg-logo.png'],
+    images: ['/logo.png'],
   },
 
   icons: {
-    icon: '/ktcg-logo.png',
-    apple: '/ktcg-logo.png',
+    icon: '/logo.png',
+    apple: '/logo.png',
   },
 }
 
