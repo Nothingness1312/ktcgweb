@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     title: 'KTCG Community',
     description:
       'Komunitas CTF Indonesia untuk belajar cybersecurity, hacking, dan capture the flag.',
-    url: 'https://ktcg.vercel.app',
+    url: 'https://ktcgweb.vercel.app',
     siteName: 'KTCG Community',
     images: [
       {
