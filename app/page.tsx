@@ -315,12 +315,12 @@ export default function Home() {
     img: '/team/5.jpg'
   },
   { 
-    name: 'soon', 
-    role: 'OSINT',
+    name: 'Garmin', 
+    role: 'Web Exploitation',
     img: '/team/6.jpg'
   },
   { 
-    name: 'soon', 
+    name: 'zenapietal', 
     role: 'OSINT',
     img: '/team/7.jpg'
   },
