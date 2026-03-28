@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 
   creator: 'KTCG Community',
 
-  metadataBase: new URL('https://ktcg.vercel.app'),
+  metadataBase: new URL('https://ktcgweb.vercel.app'),
 
   openGraph: {
     title: 'KTCG Community',
