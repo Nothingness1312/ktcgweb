@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     siteName: 'KTCG Community',
     images: [
       {
-        url: '/ktcg-logo.png',
+        url: '/logo.png',
         width: 512,
         height: 512,
       },
