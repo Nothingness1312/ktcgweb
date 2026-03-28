@@ -44,7 +44,7 @@ export default function Home() {
       name: 'TexSaw',
       date: 'Maret 2026',
       description: 'Event dari TexSaw',
-      status: 'Ongoing',
+      status: 'Completed',
       link: 'https://texsaw.org/',
       linkText: 'View Event'
     },
@@ -305,19 +305,29 @@ export default function Home() {
     img: '/team/3.jpg'
   },
   { 
-    name: 'soon', 
-    role: 'Reverse Engineering',
+    name: 'nandd3', 
+    role: 'Web Exploitation',
     img: '/team/4.jpg'
   },
   { 
-    name: 'soon', 
-    role: 'Binary Exploitation',
+    name: 'chawaa', 
+    role: 'Digital Forensics',
     img: '/team/5.jpg'
   },
   { 
     name: 'soon', 
     role: 'OSINT',
     img: '/team/6.jpg'
+  },
+  { 
+    name: 'soon', 
+    role: 'OSINT',
+    img: '/team/7.jpg'
+  },
+  { 
+    name: 'soon', 
+    role: 'OSINT',
+    img: '/team/8.jpg'
   },
 ].filter(member => selectedRole === 'All' || member.role === selectedRole).map((member, i) => (
               <div
