@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS ctf_events (
 
 -- Create admin_users table for access control
 CREATE TABLE IF NOT EXISTS admin_users (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  email TEXT UNIQUE NOT NULL,
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  email TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT now()
 );
 
@@ -42,25 +42,19 @@ CREATE POLICY "Members are viewable by everyone"
 CREATE POLICY "Only admins can insert members"
   ON members FOR INSERT
   WITH CHECK (
-    auth.uid()::text IN (
-      SELECT id::text FROM admin_users WHERE email = auth.jwt()->>'email'
-    )
+    EXISTS (SELECT 1 FROM admin_users WHERE id = auth.uid())
   );
 
 CREATE POLICY "Only admins can update members"
   ON members FOR UPDATE
   USING (
-    auth.uid()::text IN (
-      SELECT id::text FROM admin_users WHERE email = auth.jwt()->>'email'
-    )
+    EXISTS (SELECT 1 FROM admin_users WHERE id = auth.uid())
   );
 
 CREATE POLICY "Only admins can delete members"
   ON members FOR DELETE
   USING (
-    auth.uid()::text IN (
-      SELECT id::text FROM admin_users WHERE email = auth.jwt()->>'email'
-    )
+    EXISTS (SELECT 1 FROM admin_users WHERE id = auth.uid())
   );
 
 -- RLS Policies for ctf_events (public read, admin write)
@@ -71,28 +65,22 @@ CREATE POLICY "Events are viewable by everyone"
 CREATE POLICY "Only admins can insert events"
   ON ctf_events FOR INSERT
   WITH CHECK (
-    auth.uid()::text IN (
-      SELECT id::text FROM admin_users WHERE email = auth.jwt()->>'email'
-    )
+    EXISTS (SELECT 1 FROM admin_users WHERE id = auth.uid())
   );
 
 CREATE POLICY "Only admins can update events"
   ON ctf_events FOR UPDATE
   USING (
-    auth.uid()::text IN (
-      SELECT id::text FROM admin_users WHERE email = auth.jwt()->>'email'
-    )
+    EXISTS (SELECT 1 FROM admin_users WHERE id = auth.uid())
   );
 
 CREATE POLICY "Only admins can delete events"
   ON ctf_events FOR DELETE
   USING (
-    auth.uid()::text IN (
-      SELECT id::text FROM admin_users WHERE email = auth.jwt()->>'email'
-    )
+    EXISTS (SELECT 1 FROM admin_users WHERE id = auth.uid())
   );
 
--- RLS Policies for admin_users (read-only for admins)
+-- RLS Policies for admin_users (only authenticated users can view)
 CREATE POLICY "Admin users are viewable by authenticated users"
   ON admin_users FOR SELECT
   USING (auth.role() = 'authenticated');
@@ -100,11 +88,3 @@ CREATE POLICY "Admin users are viewable by authenticated users"
 CREATE POLICY "Only system can insert admin users"
   ON admin_users FOR INSERT
   WITH CHECK (false);
-
-CREATE POLICY "Only system can update admin users"
-  ON admin_users FOR UPDATE
-  USING (false);
-
-CREATE POLICY "Only system can delete admin users"
-  ON admin_users FOR DELETE
-  USING (false);
