@@ -1,65 +1,11 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { MembersSection } from '@/components/members-section';
+import { CTFSection } from '@/components/ctf-section';
 
 export default function Home() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [selectedRole, setSelectedRole] = useState('All');
-
-  // CTF Events Data
-  const ctfEvents = [
-    {
-      name: 'PsychCTF 2026',
-      date: 'Maret 2026',
-      description: 'Event dari PsychCTF',
-      status: 'Completed',
-      link: 'https://ctftime.org/event/3166',
-      linkText: 'View Event'
-    },
-    {
-      name: 'FGTE0',
-      date: 'Maret 2026',
-      description: 'Event CTF dari FGTE',
-      status: 'Completed',
-      link: 'https://ctf.ariaf.my.id',
-      linkText: 'View Event'
-    },
-    {
-      name: 'RamadanCTF 2026',
-      date: 'Maret 2026',
-      description: 'Event dari vulnlab',
-      status: 'Completed',
-      link: 'https://lab.vulnbydefault.com/ramadan-ctf-2026',
-      linkText: 'View Event'
-    },
-    {
-      name: 'RamadanCTF 2026 (Indonesia)',
-      date: 'Maret 2026',
-      description: 'Event CTF selama bulan Ramadan',
-      status: 'Completed',
-      link: 'https://ctf.ocry.com/',
-      linkText: 'View Event'
-    },
-    {
-      name: 'TexSaw',
-      date: 'Maret 2026',
-      description: 'Event dari TexSaw',
-      status: 'Completed',
-      link: 'https://texsaw.org/',
-      linkText: 'View Event'
-    },
-    {
-      name: 'Nullcon Goa HackIM 2026 CTF',
-      date: 'Februari 2026',
-      description: 'Event dari Nullcon Goa HackIM',
-      status: 'Completed',
-      link: 'https://ctftime.org/event/3066',
-      linkText: 'View Event'
-    }
-  ];
-
-  // Filter CTF events - show only first 6 events
-  const displayedEvents = ctfEvents.slice(0, 6);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); 
 
   // Refs for sections
   const heroRef = useRef<HTMLElement>(null);
@@ -200,164 +146,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Achievements Section */}
-      <section id="achievements" ref={achievementsRef} className="py-20 md:py-28 px-4 border-b border-border bg-gradient-to-b from-background via-primary/5 to-background fade-in-up">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16 fade-in-up">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">CTF Achievements</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">Event CTF yang telah diikuti dan sedang berjalan oleh anggota KTCG Community (Berdasarkan data terbaru)</p>
-          </div>
+      {/* Achievements Section - Dynamic */}
+      <CTFSection events={[]} />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {displayedEvents.map((event, i) => (
-              <div
-                key={i}
-                className="card-hover group relative p-6 bg-gradient-to-br from-card via-card to-card/50 border border-border rounded-xl overflow-hidden fade-in-up"
-                style={{ animationDelay: `${i * 0.1}s` }}
-              >
-                {/* Gradient background effect */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/20" />
-
-                {/* Content */}
-                <div className="relative z-10">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      event.status === 'Completed'
-                        ? 'bg-green-500/10 text-green-600 border border-green-500/20'
-                        : event.status === 'Ongoing'
-                        ? 'bg-blue-500/10 text-blue-600 border border-blue-500/20'
-                        : 'bg-yellow-500/10 text-yellow-600 border border-yellow-500/20'
-                    }`}>
-                      {event.status}
-                    </div>
-                    <span className="text-sm text-muted-foreground">{event.date}</span>
-                  </div>
-
-                  <h3 className="text-xl font-bold text-primary group-hover:text-accent transition-colors duration-300 mb-2">
-                    {event.name}
-                  </h3>
-
-                  <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300 mb-4">
-                    {event.description}
-                  </p>
-
-                  <div className="flex items-center justify-between">
-                    <a
-                      href={event.link}
-                      target={event.link !== '#' ? '_blank' : undefined}
-                      rel={event.link !== '#' ? 'noopener noreferrer' : undefined}
-                      className="text-xs text-primary hover:text-accent transition-colors duration-300 underline decoration-primary/30 hover:decoration-accent/50"
-                    >
-                      {event.linkText}
-                    </a>
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
-                      <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-        </div>
-      </section>
-
-      {/* Team Members Section */}
-      <section id="team" ref={teamRef} className="py-20 md:py-28 px-4 border-b border-border bg-gradient-to-b from-background via-card/10 to-background fade-in-up">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16 fade-in-up">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">Anggota KTCG</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">Tim KTCG yang berdedikasi untuk kesempurnaan dalam dunia cybersecurity</p>
-          </div>
-          {/* Role Filter */}
-          <div className="flex flex-wrap justify-center gap-2 mb-8 fade-in-up">
-            {['All', 'Digital Forensics', 'Cryptography', 'Web Exploitation', 'Reverse Engineering', 'Binary Exploitation', 'OSINT'].map((role) => (
-              <button
-                key={role}
-                onClick={() => setSelectedRole(role)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-                  selectedRole === role
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-card text-muted-foreground hover:bg-card/80'
-                }`}
-              >
-                {role}
-              </button>
-            ))}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 scale-in">
-            {[
-  { 
-    name: 'kkarinzzz', 
-    role: 'Digital Forensics',
-    img: '/team/1.jpg'
-  },
-  { 
-    name: 'Ren1Ko', 
-    role: 'Cryptography',
-    img: '/team/2.jpg'
-  },
-  { 
-    name: 'Claritys', 
-    role: 'Digital Forensics',
-    img: '/team/3.jpg'
-  },
-  { 
-    name: 'nandd3', 
-    role: 'Web Exploitation',
-    img: '/team/4.jpg'
-  },
-  { 
-    name: 'chawaa', 
-    role: 'Digital Forensics',
-    img: '/team/5.jpg'
-  },
-  { 
-    name: 'Garmin', 
-    role: 'Web Exploitation',
-    img: '/team/6.jpg'
-  },
-  { 
-    name: 'zenapietal', 
-    role: 'OSINT',
-    img: '/team/7.jpg'
-  },
-  { 
-    name: 'soon', 
-    role: 'OSINT',
-    img: '/team/8.jpg'
-  },
-].filter(member => selectedRole === 'All' || member.role === selectedRole).map((member, i) => (
-              <div
-                key={`${member.name}-${i}`}
-                className="card-hover card-reveal group relative h-64 rounded-xl p-6 bg-gradient-to-br from-card via-card to-card/50 border border-border overflow-hidden"
-                style={{ animationDelay: `${i * 0.1}s` }}
-              >
-                {/* Gradient background effect */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/20" />
-                
-                {/* Content */}
-                <div className="relative z-10 h-full flex flex-col justify-between">
-                  <img src={member.img} alt={member.name} className="w-32 h-32 mb-4 group-hover:scale-110 transition-transform duration-300 rounded-lg object-cover" />
-                  <div>
-                    <h3 className="text-xl font-bold text-primary group-hover:text-accent transition-colors duration-300 mb-2">
-                      {member.name}
-                    </h3>
-                    <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">
-                      {member.role}
-                    </p>
-                  </div>
-                  
-                  {/* Bottom accent line */}
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Team Members Section - Dynamic */}
+      <MembersSection members={[]} />
 
       {/* Discord Join Section */}
       <section id="join" ref={joinRef} className="py-20 md:py-28 px-4 border-b border-border fade-in-up">
