@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/lib/useAuth';
 import type { CTFEvent } from '@/lib/supabase';
 
 export default function ManageCTFEventsPage() {
@@ -18,19 +19,36 @@ export default function ManageCTFEventsPage() {
     display_order: 0,
   });
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { session } = useAuth();
 
   useEffect(() => {
     fetchEvents();
   }, []);
 
+  const getAuthHeader = () => {
+    if (!session?.access_token) {
+      throw new Error('No authentication token available');
+    }
+    return {
+      'Authorization': `Bearer ${session.access_token}`,
+      'Content-Type': 'application/json'
+    };
+  };
+
   const fetchEvents = async () => {
     try {
       setIsLoading(true);
+      setError(null);
       const response = await fetch('/api/ctf-events');
+      if (!response.ok) {
+        throw new Error('Failed to fetch events');
+      }
       const data = await response.json();
       setEvents(data);
     } catch (error) {
       console.error('Error fetching CTF events:', error);
+      setError('Failed to load events');
     } finally {
       setIsLoading(false);
     }
@@ -45,9 +63,10 @@ export default function ManageCTFEventsPage() {
 
     try {
       setSubmitting(true);
+      setError(null);
       const response = await fetch('/api/ctf-events', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeader(),
         body: JSON.stringify(formData),
       });
 
@@ -64,11 +83,12 @@ export default function ManageCTFEventsPage() {
         setShowAddForm(false);
         await fetchEvents();
       } else {
-        alert('Error adding event');
+        const data = await response.json();
+        setError(data.error || 'Error adding event');
       }
     } catch (error) {
       console.error('Error adding event:', error);
-      alert('Error adding event');
+      setError('Error adding event');
     } finally {
       setSubmitting(false);
     }
@@ -78,15 +98,20 @@ export default function ManageCTFEventsPage() {
     if (!confirm('Are you sure you want to delete this event?')) return;
 
     try {
-      const response = await fetch(`/api/ctf-events/${id}`, { method: 'DELETE' });
+      setError(null);
+      const response = await fetch(`/api/ctf-events/${id}`, {
+        method: 'DELETE',
+        headers: getAuthHeader(),
+      });
       if (response.ok) {
         await fetchEvents();
       } else {
-        alert('Error deleting event');
+        const data = await response.json();
+        setError(data.error || 'Error deleting event');
       }
     } catch (error) {
       console.error('Error deleting event:', error);
-      alert('Error deleting event');
+      setError('Error deleting event');
     }
   };
 
@@ -131,6 +156,13 @@ export default function ManageCTFEventsPage() {
 
       {/* Content */}
       <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+            <p className="text-red-600 font-medium">{error}</p>
+          </div>
+        )}
+
         {/* Add Event Form */}
         {showAddForm && (
           <div className="mb-8 p-6 bg-card border border-border rounded-xl">

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseServerClient } from '@/lib/supabase';
+import { verifyAuth, validateBody, sanitizeInput, checkRateLimit, createErrorResponse, createSuccessResponse } from '@/lib/api-auth';
 
 export async function GET(
   request: NextRequest,
@@ -16,19 +17,13 @@ export async function GET(
       .single();
 
     if (error) {
-      return NextResponse.json(
-        { error: 'CTF event not found' },
-        { status: 404 }
-      );
+      return createErrorResponse('CTF event not found', 404);
     }
 
-    return NextResponse.json(data);
+    return createSuccessResponse(data);
   } catch (error) {
     console.error('Error fetching CTF event:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return createErrorResponse('Internal server error', 500);
   }
 }
 
@@ -37,21 +32,46 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Check rate limit
+    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+    if (!checkRateLimit(ip)) {
+      return createErrorResponse('Too many requests', 429);
+    }
+
+    // Verify authentication
+    const { user, error: authError, status: authStatus } = await verifyAuth(request);
+    if (authError || !user) {
+      return createErrorResponse(authError || 'Unauthorized', authStatus);
+    }
+
     const { id } = await params;
     const body = await request.json();
     const { name, date, description, status, link, link_text, display_order } = body;
+
+    // Validate required fields
+    const validation = validateBody({ name, date }, ['name', 'date']);
+    if (!validation.valid) {
+      return createErrorResponse(validation.error || 'Validation failed', 400);
+    }
+
+    // Sanitize inputs
+    const sanitizedName = sanitizeInput(name);
+    const sanitizedDate = sanitizeInput(date);
+    const sanitizedDescription = description ? sanitizeInput(description) : null;
+    const sanitizedLink = link ? sanitizeInput(link) : null;
+    const sanitizedLinkText = link_text ? sanitizeInput(link_text) : 'View Event';
 
     const supabase = getSupabaseServerClient();
     
     const { data, error } = await supabase
       .from('ctf_events')
       .update({
-        name,
-        date,
-        description,
+        name: sanitizedName,
+        date: sanitizedDate,
+        description: sanitizedDescription,
         status,
-        link,
-        link_text,
+        link: sanitizedLink,
+        link_text: sanitizedLinkText,
         display_order,
         updated_at: new Date().toISOString()
       })
@@ -60,19 +80,13 @@ export async function PUT(
       .single();
 
     if (error) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 400 }
-      );
+      return createErrorResponse(error.message, 400);
     }
 
-    return NextResponse.json(data);
+    return createSuccessResponse(data);
   } catch (error) {
     console.error('Error updating CTF event:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return createErrorResponse('Internal server error', 500);
   }
 }
 
@@ -81,6 +95,18 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Check rate limit
+    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+    if (!checkRateLimit(ip)) {
+      return createErrorResponse('Too many requests', 429);
+    }
+
+    // Verify authentication
+    const { user, error: authError, status: authStatus } = await verifyAuth(request);
+    if (authError || !user) {
+      return createErrorResponse(authError || 'Unauthorized', authStatus);
+    }
+
     const { id } = await params;
     const supabase = getSupabaseServerClient();
     
@@ -90,18 +116,12 @@ export async function DELETE(
       .eq('id', id);
 
     if (error) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 400 }
-      );
+      return createErrorResponse(error.message, 400);
     }
 
-    return NextResponse.json({ success: true });
+    return createSuccessResponse({ success: true });
   } catch (error) {
     console.error('Error deleting CTF event:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return createErrorResponse('Internal server error', 500);
   }
 }

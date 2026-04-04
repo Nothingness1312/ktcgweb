@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/lib/useAuth';
 import type { Member } from '@/lib/supabase';
 
 export default function ManageMembersPage() {
@@ -10,19 +11,36 @@ export default function ManageMembersPage() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({ name: '', role: '', image_url: '' });
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { session } = useAuth();
 
   useEffect(() => {
     fetchMembers();
   }, []);
 
+  const getAuthHeader = () => {
+    if (!session?.access_token) {
+      throw new Error('No authentication token available');
+    }
+    return {
+      'Authorization': `Bearer ${session.access_token}`,
+      'Content-Type': 'application/json'
+    };
+  };
+
   const fetchMembers = async () => {
     try {
       setIsLoading(true);
+      setError(null);
       const response = await fetch('/api/members');
+      if (!response.ok) {
+        throw new Error('Failed to fetch members');
+      }
       const data = await response.json();
       setMembers(data);
     } catch (error) {
       console.error('Error fetching members:', error);
+      setError('Failed to load members');
     } finally {
       setIsLoading(false);
     }
@@ -37,9 +55,10 @@ export default function ManageMembersPage() {
 
     try {
       setSubmitting(true);
+      setError(null);
       const response = await fetch('/api/members', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeader(),
         body: JSON.stringify(formData),
       });
 
@@ -48,11 +67,12 @@ export default function ManageMembersPage() {
         setShowAddForm(false);
         await fetchMembers();
       } else {
-        alert('Error adding member');
+        const data = await response.json();
+        setError(data.error || 'Error adding member');
       }
     } catch (error) {
       console.error('Error adding member:', error);
-      alert('Error adding member');
+      setError('Error adding member');
     } finally {
       setSubmitting(false);
     }
@@ -62,15 +82,20 @@ export default function ManageMembersPage() {
     if (!confirm('Are you sure you want to delete this member?')) return;
 
     try {
-      const response = await fetch(`/api/members/${id}`, { method: 'DELETE' });
+      setError(null);
+      const response = await fetch(`/api/members/${id}`, {
+        method: 'DELETE',
+        headers: getAuthHeader(),
+      });
       if (response.ok) {
         await fetchMembers();
       } else {
-        alert('Error deleting member');
+        const data = await response.json();
+        setError(data.error || 'Error deleting member');
       }
     } catch (error) {
       console.error('Error deleting member:', error);
-      alert('Error deleting member');
+      setError('Error deleting member');
     }
   };
 
@@ -102,6 +127,13 @@ export default function ManageMembersPage() {
 
       {/* Content */}
       <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+            <p className="text-red-600 font-medium">{error}</p>
+          </div>
+        )}
+
         {/* Add Member Form */}
         {showAddForm && (
           <div className="mb-8 p-6 bg-card border border-border rounded-xl">

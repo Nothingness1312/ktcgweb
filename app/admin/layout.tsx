@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { AdminProtectedWrapper } from '@/components/admin-protected-wrapper';
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard | KTCG',
@@ -12,7 +13,9 @@ export default function AdminLayout({
 }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {children}
+      <AdminProtectedWrapper>
+        {children}
+      </AdminProtectedWrapper>
     </div>
   );
 }
