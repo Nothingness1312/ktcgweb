@@ -7,7 +7,11 @@ import type { User, Session } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+let supabase: ReturnType<typeof createClient> | null = null;
+
+if (supabaseUrl && supabaseAnonKey) {
+  supabase = createClient(supabaseUrl, supabaseAnonKey);
+}
 
 interface UseAuthReturn {
   user: User | null;
@@ -30,6 +34,12 @@ export function useAuth(): UseAuthReturn {
     // Get initial session
     const getInitialSession = async () => {
       try {
+        if (!supabase) {
+          setError('Supabase configuration missing');
+          setLoading(false);
+          return;
+        }
+
         const {
           data: { session },
           error,
@@ -49,23 +59,29 @@ export function useAuth(): UseAuthReturn {
     getInitialSession();
 
     // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setSession(session);
-      setUser(session?.user || null);
-      setError(null);
-    });
+    if (supabase) {
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange(async (event, session) => {
+        setSession(session);
+        setUser(session?.user || null);
+        setError(null);
+      });
 
-    return () => {
-      subscription?.unsubscribe();
-    };
+      return () => {
+        subscription?.unsubscribe();
+      };
+    }
   }, []);
 
   const signUp = useCallback(async (email: string, password: string) => {
     setLoading(true);
     setError(null);
     try {
+      if (!supabase) {
+        throw new Error('Supabase is not configured');
+      }
+
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -84,6 +100,10 @@ export function useAuth(): UseAuthReturn {
     setLoading(true);
     setError(null);
     try {
+      if (!supabase) {
+        throw new Error('Supabase is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY environment variables.');
+      }
+
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -102,6 +122,10 @@ export function useAuth(): UseAuthReturn {
     setLoading(true);
     setError(null);
     try {
+      if (!supabase) {
+        throw new Error('Supabase is not configured');
+      }
+
       const { error } = await supabase.auth.signOut();
 
       if (error) throw error;

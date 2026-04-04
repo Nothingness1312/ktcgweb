@@ -7,15 +7,28 @@ import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { signIn, loading: authLoading, error: authError, isAuthenticated } = useAuth();
+  const { signIn, loading: authLoading, error: authError, isAuthenticated, loading: initialLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [localError, setLocalError] = useState<string | null>(null);
+  const [redirecting, setRedirecting] = useState(false);
 
-  // Redirect if already authenticated
-  if (isAuthenticated) {
+  // Redirect if already authenticated (but wait for initial load)
+  if (!initialLoading && isAuthenticated && !redirecting) {
+    setRedirecting(true);
     router.push('/admin');
-    return null;
+  }
+
+  // Show loading state while checking initial session or redirecting
+  if (initialLoading || redirecting) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-background/50">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
