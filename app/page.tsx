@@ -312,7 +312,7 @@ export default function Home() {
   { 
     name: 'chawaa', 
     role: 'Digital Forensics',
-    img: '/team/5.jpg'
+    img: '/team/5.png'
   },
   { 
     name: 'Garmin', 
