@@ -326,7 +326,7 @@ export default function Home() {
   },
   { 
     name: 'Vankys', 
-    role: 'Web Exploitation',
+    role: 'OSINT',
     img: '/team/8.jpg'
   },
   { 
