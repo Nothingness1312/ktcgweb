@@ -325,10 +325,15 @@ export default function Home() {
     img: '/team/7.jpg'
   },
   { 
-    name: 'soon', 
-    role: 'OSINT',
+    name: 'Vankys', 
+    role: 'Web Exploitation',
     img: '/team/8.jpg'
   },
+  { 
+    name: 'soon', 
+    role: 'OSINT',
+    img: '/team/9.jpg'
+  }
 ].filter(member => selectedRole === 'All' || member.role === selectedRole).map((member, i) => (
               <div
                 key={`${member.name}-${i}`}
