@@ -167,8 +167,8 @@ export default function Home() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4 mt-16 pt-12 border-t border-border fade-in-up">
             <div className="fade-in-left">
-              <div className="text-3xl font-bold text-primary">100+</div>
-              <div className="text-sm text-muted-foreground">Active Members</div>
+              <div className="text-3xl font-bold text-primary">300+</div>
+              <div className="text-sm text-muted-foreground">Members</div>
             </div>
             <div className="fade-in-up">
               <div className="text-3xl font-bold text-accent">2025</div>
